@@ -31,9 +31,9 @@ func init() {
 
 func main() {
 
-	Info.Println("飞雪无情的博客:", "http://www.flysnow.org")
-	Warning.Printf("飞雪无情的微信公众号：%s\n", "flysnow_org")
-	Error.Println("欢迎关注留言")
+	// Info.Println("飞雪无情的博客:", "http://www.flysnow.org")
+	// Warning.Printf("飞雪无情的微信公众号：%s\n", "flysnow_org")
+	// Error.Println("欢迎关注留言")
 
 	// 数据库初始化
 	mydatabase.InitDataBaseWithDataBase("miaoyou_data")

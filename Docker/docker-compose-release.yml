@@ -1,0 +1,17 @@
+# 指定版本
+version: '3.8'
+services:
+  miaoyou_server: 
+      image: bairdweng/miaoyou_server
+      network_mode: "host"          
+  # nginx的配置
+  nginx:
+      # 重启
+      restart: always
+      image: nginx
+      # 配置映射
+      network_mode: "host"
+      ports: 
+        - 80:80  
+      volumes: 
+        - ./config/api.bairdweng.com.conf:/etc/nginx/conf.d/api.bairdweng.com.conf

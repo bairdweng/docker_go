@@ -1,1 +1,15 @@
-sudo ssh -i /Users/bairdweng/Desktop/servers/MiaoYouServer-iOS/serverConfig/mac_mini  root@118.89.36.207
+sudo ssh -i serverConfig/mac_mini  root@118.89.36.207
+
+docker run --name nginx -p 80:80 -v /root/docker/miaoyou_server/Docker/nginx/my.conf:/etc/nginx/conf.d/my.conf -d nginx
+
+
+
+
+// host模式
+docker run  -d --name nginx -v /root/docker/miaoyou_server/Docker/nginx/my.conf:/etc/nginx/conf.d/my.conf --network host nginx
+
+// 删除
+docker stop nginx && docker rm nginx
+
+// 运行服务
+docker run -d --name miaoyou_server --network host miaoyou_server
