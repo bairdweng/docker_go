@@ -15,7 +15,7 @@ func InitDataBaseWithDataBase(name string) {
 	// baseURL = "docker.for.mac.host.internal"
 	var password = "jiangye089"
 	// password = "root"
-	var url = fmt.Sprintf("root:%s@tcp(%s:3306)/%s?charset=utf8&parseTime=True&loc=%s", password, baseURL, name, "Asia%2Fshanghai")
+	var url = fmt.Sprintf("root:%s@tcp(%s:3306)/%s?charset=utf8&parseTime=True&loc=%s", password, baseURL, name, "Asia%2FShanghai")
 	db, err := gorm.Open("mysql", url)
 	if err != nil {
 		println("数据库连接失败", err.Error())
