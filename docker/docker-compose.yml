@@ -1,0 +1,14 @@
+# 服务端的部署-指定版本
+version: '2.2'
+services:
+    nginx:
+      restart: always
+      image: nginx
+      network_mode: 'host'
+      volumes:
+         - ./config/nginx.conf:/etc/nginx/conf.d/nginx.conf
+    miaoyou_server:
+      build:
+        context: ./miaoyou_server
+      restart: always
+      network_mode: 'host'
