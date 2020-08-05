@@ -1,11 +1,12 @@
 package main
 
 import (
-	"MiaoYouGame/controllers"
-	"MiaoYouGame/models"
-	"MiaoYouGame/mydatabase"
-	"MiaoYouGame/routers"
 	"log"
+
+	"com.miaoyou.server/controllers"
+	"com.miaoyou.server/models"
+	"com.miaoyou.server/mydatabase"
+	"com.miaoyou.server/routers"
 
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/robfig/cron"
