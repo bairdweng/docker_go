@@ -1,9 +1,9 @@
 package controllers
 
 import (
+	"com.miaoyou.server/database"
 	"com.miaoyou.server/helper"
 	"com.miaoyou.server/models"
-	"com.miaoyou.server/mydatabase"
 
 	"github.com/gin-gonic/gin"
 )
@@ -15,7 +15,7 @@ func SDKInit(c *gin.Context) {
 		c.JSON(200, helper.Error(err.Error(), nil))
 		return
 	}
-	db := mydatabase.Gdb
+	db := database.Gdb
 	var record models.DeviceInfo
 	if err := db.Where("pid = ?", deviceInfo.Pid).First(&record).Error; err != nil {
 		if err := db.Create(deviceInfo).Error; err != nil {

@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"time"
 
+	"com.miaoyou.server/database"
 	"com.miaoyou.server/helper"
 	"com.miaoyou.server/models"
-	"com.miaoyou.server/mydatabase"
 
 	"github.com/gin-gonic/gin"
 )
@@ -23,7 +23,7 @@ func Login(c *gin.Context) {
 		c.JSON(200, helper.Error(err.Error(), nil))
 		return
 	}
-	db := mydatabase.Gdb
+	db := database.Gdb
 	var user models.User
 	if err := db.Where("user_name = ?", userName).First(&user).Error; err != nil {
 		c.JSON(200, helper.Error("用户不存在", nil))
@@ -63,7 +63,7 @@ func Register(c *gin.Context) {
 		c.JSON(200, helper.Error(err.Error(), nil))
 		return
 	}
-	db := mydatabase.Gdb
+	db := database.Gdb
 	if err := db.Where("user_name = ?", userName).First(&user).Error; err != nil {
 		enp, err := helper.EnPassword(user.Password)
 		if err != nil {

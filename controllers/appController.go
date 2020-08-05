@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"net/http"
 
+	"com.miaoyou.server/database"
 	"com.miaoyou.server/helper"
 	"com.miaoyou.server/models"
-	"com.miaoyou.server/mydatabase"
 
 	"github.com/gin-gonic/gin"
 )
@@ -18,7 +18,7 @@ func AddApp(c *gin.Context) {
 		c.JSON(200, helper.Error(err.Error(), nil))
 		return
 	}
-	db := mydatabase.Gdb
+	db := database.Gdb
 	if err := db.Where("app_id = ?", info.AppID).First(&info).Error; err == nil {
 		c.JSON(200, helper.Error(info.AppName+"已存在啦哦", nil))
 		return

@@ -4,8 +4,8 @@ import (
 	"log"
 
 	"com.miaoyou.server/controllers"
+	"com.miaoyou.server/database"
 	"com.miaoyou.server/models"
-	"com.miaoyou.server/mydatabase"
 	"com.miaoyou.server/routers"
 
 	_ "github.com/go-sql-driver/mysql"
@@ -25,15 +25,15 @@ func main() {
 	c.Start()
 	defer c.Stop()
 	// 数据库初始化
-	mydatabase.InitDataBaseWithDataBase("miaoyou_data")
-	db := mydatabase.Gdb
+	database.InitDataBaseWithDataBase("miaoyou_data")
+	db := database.Gdb
 	// 自动同步
 	db.AutoMigrate(&models.AppInfo{}, &models.DeviceInfo{}, &models.User{})
 	routers.Init()
 }
 func syncAppInfo() {
 	log.Println("Run 5s cron")
-	db := mydatabase.Gdb
+	db := database.Gdb
 	var infos []models.AppInfo
 	db.Find(&infos)
 	if len(infos) > 0 {
@@ -46,7 +46,7 @@ func syncAppInfo() {
 
 // CallBack 回调
 func CallBack(code int, appID string) {
-	db := mydatabase.Gdb
+	db := database.Gdb
 	var info models.AppInfo
 	if err := db.Where("app_id = ?", appID).First(&info).Error; err != nil {
 		print("app信息没有找到")
