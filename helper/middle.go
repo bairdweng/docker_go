@@ -9,7 +9,7 @@ func MYMiddle() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		token := c.PostForm("token")
 		path := c.Request.URL.Path
-		if path == "/user/login" {
+		if path == "/user/login" || path == "/user/register" {
 			c.Next()
 			return
 		}

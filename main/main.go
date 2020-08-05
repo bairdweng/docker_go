@@ -1,45 +1,64 @@
 package main
 
 import (
+	"MiaoYouGame/controllers"
+	"MiaoYouGame/models"
 	"MiaoYouGame/mydatabase"
 	"MiaoYouGame/routers"
-	"io"
 	"log"
-	"os"
 
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/robfig/cron"
 	// log "github.com/sirupsen/logrus"
 )
 
-var (
-	Info    *log.Logger
-	Warning *log.Logger
-	Error   *log.Logger
-)
+func main() {
+	log.Println("Starting...")
 
-func init() {
-	errFile, err := os.OpenFile("errors.log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
-	if err != nil {
-		log.Fatalln("打开日志文件失败：", err)
+	// 定义一个cron运行器
+	c := cron.New()
+	// 定时5秒，每5秒执行print5
+	c.AddFunc("*/300 * * * * *", syncAppInfo)
+
+	// 开始
+	c.Start()
+	defer c.Stop()
+	// 数据库初始化
+	mydatabase.InitDataBaseWithDataBase("miaoyou_data")
+	db := mydatabase.Gdb
+	// 自动同步
+	db.AutoMigrate(&models.AppInfo{}, &models.DeviceInfo{}, &models.User{})
+	routers.Init()
+}
+func syncAppInfo() {
+	log.Println("Run 5s cron")
+	db := mydatabase.Gdb
+	var infos []models.AppInfo
+	db.Find(&infos)
+	if len(infos) > 0 {
+		for _, info := range infos {
+			controllers.GetAppInfo(info.AppID, CallBack)
+		}
 	}
-
-	Info = log.New(os.Stdout, "Info:", log.Ldate|log.Ltime|log.Lshortfile)
-	Warning = log.New(os.Stdout, "Warning:", log.Ldate|log.Ltime|log.Lshortfile)
-	Error = log.New(io.MultiWriter(os.Stderr, errFile), "Error:", log.Ldate|log.Ltime|log.Lshortfile)
 
 }
 
-func main() {
-
-	// Info.Println("飞雪无情的博客:", "http://www.flysnow.org")
-	// Warning.Printf("飞雪无情的微信公众号：%s\n", "flysnow_org")
-	// Error.Println("欢迎关注留言")
-
-	// 数据库初始化
-	mydatabase.InitDataBaseWithDataBase("miaoyou_data")
-	routers.Init()
-	// log.WithFields(log.Fields{
-	// 	"animal": "walrus",
-	// }).Info("A walrus appears")
-
+// CallBack 回调
+func CallBack(code int, appID string) {
+	db := mydatabase.Gdb
+	var info models.AppInfo
+	if err := db.Where("app_id = ?", appID).First(&info).Error; err != nil {
+		print("app信息没有找到")
+		return
+	}
+	if code == 404 {
+		info.Status = "下架"
+	} else {
+		info.Status = "在线"
+	}
+	if err := db.Model(&info).Updates(&info).Error; err != nil {
+		print("app信息更新失败")
+		return
+	}
+	print("状态更新成功啦：appId: ", appID)
 }

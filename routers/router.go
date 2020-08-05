@@ -37,8 +37,12 @@ func Init() {
 		}
 	})
 
+	RegisteAppRoute(router)
+
 	router.Use(helper.MYMiddle())
 	RegisteUsersRoute(router)
 
 	router.Run(":8200") // listen and serve on 0.0.0.0:8080
+
+	helper.Corestart()
 }
