@@ -1,4 +1,4 @@
-module MiaoYouGame
+module com.miaoyou.server
 
 go 1.14
 

@@ -1,7 +1,7 @@
 package routers
 
 import (
-	"MiaoYouGame/controllers"
+	"com.miaoyou.server/controllers"
 
 	"github.com/gin-gonic/gin"
 )

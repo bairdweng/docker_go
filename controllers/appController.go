@@ -1,11 +1,12 @@
 package controllers
 
 import (
-	"MiaoYouGame/helper"
-	"MiaoYouGame/models"
-	"MiaoYouGame/mydatabase"
 	"fmt"
 	"net/http"
+
+	"com.miaoyou.server/helper"
+	"com.miaoyou.server/models"
+	"com.miaoyou.server/mydatabase"
 
 	"github.com/gin-gonic/gin"
 )
