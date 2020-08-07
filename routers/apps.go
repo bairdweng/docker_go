@@ -11,5 +11,8 @@ func RegisteAppRoute(router *gin.Engine) {
 	users := router.Group("/app")
 	{
 		users.POST("/add", controllers.AddApp)
+		users.GET("/getAppInfos", controllers.GetAllAppInfos)
+		users.GET("/getAppInfo/:bundleID", controllers.GetAppInfoByBundleID)
+		users.POST("/addRemark", controllers.AddRemark)
 	}
 }

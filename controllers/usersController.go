@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"fmt"
 	"time"
 
 	"com.miaoyou.server/database"
@@ -29,8 +28,7 @@ func Login(c *gin.Context) {
 		c.JSON(200, helper.Error("用户不存在", nil))
 	} else {
 		if helper.ValationPassWord(passWord, user.Password) == true {
-			userID := fmt.Sprintf("%d", user.ID)
-			token, err := helper.GetToken(userID)
+			token, err := helper.GetToken(user.ID)
 			if err != nil {
 				c.JSON(200, helper.Error("获取token失败", nil))
 			} else {
@@ -52,7 +50,6 @@ func Register(c *gin.Context) {
 		c.JSON(200, helper.Error(err.Error(), nil))
 		return
 	}
-
 	userName := c.PostForm("userName")
 	if err := helper.VerylyParamsByUserName(userName); err != nil {
 		c.JSON(200, helper.Error(err.Error(), nil))

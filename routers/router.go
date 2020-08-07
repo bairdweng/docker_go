@@ -18,7 +18,7 @@ func Init() {
 	}
 
 	router.GET("/getToken", func(c *gin.Context) {
-		token, err := helper.GetToken("test")
+		token, err := helper.GetToken(1)
 		if err == nil {
 			c.JSON(200, helper.Successful(token))
 		} else {
@@ -29,7 +29,7 @@ func Init() {
 	router.GET("/validation", func(c *gin.Context) {
 		token := c.Query("token")
 		deToken, err := helper.ValiteToken(token)
-		userName := helper.GetTokenValue("userName", deToken.Claims)
+		userName := helper.GetTokenValue("userToken", deToken.Claims)
 		if err == nil {
 			c.JSON(200, helper.Successful(userName))
 		} else {
@@ -37,12 +37,10 @@ func Init() {
 		}
 	})
 
-	RegisteAppRoute(router)
-
 	router.Use(helper.MYMiddle())
+	// 注册app路由
+	RegisteAppRoute(router)
+	// 注册用户路由
 	RegisteUsersRoute(router)
-
 	router.Run(":8200") // listen and serve on 0.0.0.0:8080
-
-	helper.Corestart()
 }

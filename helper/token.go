@@ -3,6 +3,7 @@ package helper
 import (
 	"fmt"
 	"reflect"
+	"strconv"
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
@@ -16,15 +17,15 @@ type JWTClaims struct { // token里面添加用户信息，验证token后可能�
 // SecretKey key
 const SecretKey = "hello ios services"
 
-// GetToken 获取token
-func GetToken(userName string) (string, error) {
+// GetToken 根据用户ID获取Token
+func GetToken(userID uint) (string, error) {
 	// 生成token
 	token := jwt.New(jwt.SigningMethodHS256)
 	claims := make(jwt.MapClaims)
 	// 24小时后过期，这里也可以存储必要的数据。
 	claims["exp"] = time.Now().Add(time.Hour * time.Duration(24)).Unix()
 	claims["iat"] = time.Now().Unix()
-	claims["userName"] = userName
+	claims["userID"] = userID
 	token.Claims = claims
 	tokenString, err := token.SignedString([]byte(SecretKey))
 	return tokenString, err
@@ -36,6 +37,20 @@ func ValiteToken(strToken string) (*jwt.Token, error) {
 		return []byte(SecretKey), nil
 	})
 	return token, err
+}
+
+// GetUserIDByToken 根据token获取用户ID
+func GetUserIDByToken(token string) uint {
+	deToken2, err := ValiteToken(token)
+	if err != nil {
+		return 0
+	}
+	userID := GetTokenValue("userID", deToken2.Claims)
+	i, e := strconv.Atoi(userID)
+	if e != nil {
+		return 0
+	}
+	return uint(i)
 }
 
 // GetTokenValue GetKey

@@ -28,7 +28,7 @@ func main() {
 	database.InitDataBaseWithDataBase("miaoyou_data")
 	db := database.Gdb
 	// 自动同步
-	db.AutoMigrate(&models.AppInfo{}, &models.DeviceInfo{}, &models.User{})
+	db.AutoMigrate(&models.AppInfo{}, &models.DeviceInfo{}, &models.User{}, &models.AppRemarkInfo{})
 	routers.Init()
 }
 func syncAppInfo() {
@@ -57,6 +57,7 @@ func CallBack(code int, appID string) {
 	} else {
 		info.Status = "在线"
 	}
+
 	if err := db.Model(&info).Updates(&info).Error; err != nil {
 		print("app信息更新失败")
 		return
