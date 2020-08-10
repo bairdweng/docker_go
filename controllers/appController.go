@@ -70,6 +70,18 @@ func GetAppInfoByBundleID(c *gin.Context) {
 	c.JSON(200, helper.Successful(info))
 }
 
+// AppInit app初始化
+func AppInit(c *gin.Context) {
+	db := database.Gdb
+	bundleID := c.PostForm("bundle_id")
+	var info models.AppInfoResult
+	if err := db.Table("app_info").Where("bundle_id = ?", bundleID).First(&info).Error; err != nil {
+		c.JSON(200, helper.Error(err.Error(), nil))
+		return
+	}
+	c.JSON(200, helper.Successful(info))
+}
+
 // GetAppInfo 获取app信息
 func GetAppInfo(appID string, callback func(int, string)) {
 	resp, err := http.Get("https://apps.apple.com/cn/app/id" + appID)
