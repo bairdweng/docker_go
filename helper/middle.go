@@ -8,6 +8,10 @@ import (
 func MYMiddle() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		token := c.PostForm("token")
+		// 兼容get获取
+		if len(token) == 0 {
+			token, _ = c.GetQuery("token")
+		}
 		path := c.Request.URL.Path
 		if path == "/user/login" || path == "/user/register" {
 			c.Next()

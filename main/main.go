@@ -28,9 +28,11 @@ func main() {
 	database.InitDataBaseWithDataBase("miaoyou_data")
 	db := database.Gdb
 	// 自动同步
-	db.AutoMigrate(&models.AppInfo{}, &models.DeviceInfo{}, &models.User{}, &models.AppRemarkInfo{})
+	db.AutoMigrate(&models.AppInfo{}, &models.User{}, &models.AppRemarkInfo{})
 	routers.Init()
 }
+
+// syncAppInfo
 func syncAppInfo() {
 	log.Println("Run 5s cron")
 	db := database.Gdb
@@ -41,7 +43,6 @@ func syncAppInfo() {
 			controllers.GetAppInfo(info.AppID, CallBack)
 		}
 	}
-
 }
 
 // CallBack 回调

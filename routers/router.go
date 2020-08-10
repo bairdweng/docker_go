@@ -1,7 +1,6 @@
 package routers
 
 import (
-	"com.miaoyou.server/controllers"
 	"com.miaoyou.server/helper"
 
 	"github.com/gin-gonic/gin"
@@ -11,11 +10,6 @@ import (
 func Init() {
 
 	router := gin.Default()
-
-	v1 := router.Group("/sdk")
-	{
-		v1.POST("/init", controllers.SDKInit)
-	}
 
 	router.GET("/getToken", func(c *gin.Context) {
 		token, err := helper.GetToken(1)
