@@ -80,6 +80,19 @@ func AppInit(c *gin.Context) {
 		return
 	}
 	c.JSON(200, helper.Successful(info))
+	addAccessRecord(info.ID, c.ClientIP())
+}
+
+// 添加一条访问记录
+func addAccessRecord(appID uint, clientIP string) {
+	db := database.Gdb
+	var acc = new(models.AccessRecords)
+	acc.AppID = appID
+	acc.IP = clientIP
+	if err := db.Create(&acc).Error; err != nil {
+		print("添加ip访问记录失败" + err.Error())
+		return
+	}
 }
 
 // GetAppInfo 获取app信息

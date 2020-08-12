@@ -28,7 +28,7 @@ func main() {
 	database.InitDataBaseWithDataBase("miaoyou_data")
 	db := database.Gdb
 	// 自动同步
-	db.AutoMigrate(&models.AppInfo{}, &models.User{}, &models.AppRemarkInfo{})
+	db.AutoMigrate(&models.AppInfo{}, &models.User{}, &models.AppRemarkInfo{}, &models.AccessRecords{})
 	routers.Init()
 }
 
