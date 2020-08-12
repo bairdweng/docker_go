@@ -15,5 +15,6 @@ func RegisteAppRoute(router *gin.Engine) {
 		users.GET("/getAppInfo/:bundleID", controllers.GetAppInfoByBundleID)
 		users.POST("/addRemark", controllers.AddRemark)
 		users.POST("/init", controllers.AppInit)
+		users.GET("/getAccessRecord", controllers.GetAccessRecord)
 	}
 }

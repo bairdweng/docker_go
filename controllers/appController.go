@@ -95,6 +95,40 @@ func addAccessRecord(appID uint, clientIP string) {
 	}
 }
 
+// GetAccessRecord 获取访问记录
+func GetAccessRecord(c *gin.Context) {
+	pageSize := helper.StrToUInt(c.DefaultQuery("page_size", "10"))
+	pageIndex := helper.StrToUInt(c.DefaultQuery("page_index", "1"))
+	ID := helper.StrToUInt(c.Query("id"))
+	if ID == 0 {
+		c.JSON(200, helper.Error("id不能为空", nil))
+		return
+	}
+
+	db := database.Gdb
+
+	var info models.AppInfoResult
+	if err := db.Table("app_info").Where("id = ?", ID).First(&info).Error; err != nil {
+		c.JSON(200, helper.Error(err.Error(), nil))
+		return
+	}
+
+	recordDB := db.Model(&models.AccessRecords{}).Where(&models.AccessRecords{AppID: ID})
+	var count int32
+	recordDB.Count(&count) //总行数
+	records := []models.AccessRecords{}
+	recordDB.Offset((pageIndex - 1) * pageSize).Limit(pageSize).Find(&records)
+	result := map[string]interface{}{
+		"records":    records,
+		"count":      count,
+		"app_info":   info,
+		"page_size":  pageSize,
+		"page_index": pageIndex,
+	}
+	c.JSON(200, helper.Successful(result))
+
+}
+
 // GetAppInfo 获取app信息
 func GetAppInfo(appID string, callback func(int, string)) {
 	resp, err := http.Get("https://apps.apple.com/cn/app/id" + appID)
