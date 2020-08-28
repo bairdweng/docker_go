@@ -2,7 +2,9 @@ package database
 
 import (
 	"fmt"
+	"time"
 
+	"com.miaoyou.server/models"
 	"github.com/jinzhu/gorm"
 )
 
@@ -19,8 +21,14 @@ func InitDataBaseWithDataBase(name string) {
 	db, err := gorm.Open("mysql", url)
 	if err != nil {
 		println("数据库连接失败", err.Error())
+	} else {
+		println("数据库连接成功")
 	}
 	db.SingularTable(true)
-	db.LogMode(true)
+
+	// db.LogMode(true)
 	Gdb = db
+	time.Sleep(time.Second * 1)
+	// // 自动同步
+	db.AutoMigrate(&models.AppInfo{}, &models.User{}, &models.AppRemarkInfo{}, &models.AccessRecords{})
 }

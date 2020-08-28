@@ -2,7 +2,6 @@ package routers
 
 import (
 	"com.miaoyou.server/controllers"
-
 	"github.com/gin-gonic/gin"
 )
 

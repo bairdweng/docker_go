@@ -130,13 +130,13 @@ func GetAccessRecord(c *gin.Context) {
 }
 
 // GetAppInfo 获取app信息
-func GetAppInfo(appID string, callback func(int, string)) {
+func GetAppInfo(appID string, ch chan string, callback func(int, string, chan string)) {
 	resp, err := http.Get("https://apps.apple.com/cn/app/id" + appID)
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
-	callback(resp.StatusCode, appID)
+	callback(resp.StatusCode, appID, ch)
 }
 
 // AddRemark app添加备注
