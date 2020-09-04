@@ -6,6 +6,7 @@ import (
 	"com.miaoyou.server/database"
 	"com.miaoyou.server/helper"
 	"com.miaoyou.server/models"
+	"com.miaoyou.server/redis"
 
 	"github.com/gin-gonic/gin"
 )
@@ -34,6 +35,10 @@ func Login(c *gin.Context) {
 			} else {
 				result := map[string]string{
 					"token": token,
+				}
+				if err2 := redis.SaveToken(user.ID, token); err2 != nil {
+					c.JSON(200, helper.Error("token保存失败"+err2.Error(), nil))
+					return
 				}
 				c.JSON(200, helper.Successful(result))
 			}
